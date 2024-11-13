@@ -2,6 +2,7 @@
 using Alza.Contracts.DataObjects.Products;
 using Alza.Core.Models;
 using Alza.Host.Controllers.V1;
+using Alza.Host.Extensions;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,12 +21,17 @@ public class ProductsController : ControllerBase
         this.productService = productService ?? throw new ArgumentNullException(nameof(productService));
     }
 
+    /// <summary>
+    /// Retrieves paginated list of products from source.
+    /// </summary>
+    /// <param name="request">Pagination request.</param>
+    /// <returns>ingle page of products accprding to request.</returns>
     [HttpGet]
     [Route("list")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ProductListItemResponse>))]
     public async Task<IActionResult> GetListAsync([FromQuery] PagedRequest request)
     {
         var result = await productService.GetPagedAsync(request);
-        return Ok(result);
+        return result.ToActionResult();
     }
 }

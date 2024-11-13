@@ -3,7 +3,7 @@ using Microsoft.OpenApi.Models;
 
 namespace Alza.Host.Extensions;
 
-public static class WebApplicationExtension
+public static class WebApplicationExtensions
 {
     public static IApplicationBuilder AddOpenApi(this IApplicationBuilder app)
     {

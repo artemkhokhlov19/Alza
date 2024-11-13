@@ -1,9 +1,11 @@
 ﻿using Alza.Contracts.DataObjects.Products;
+using Alza.Core.BusinessReuslt;
 using Alza.Core.Data.Extensions;
 using Alza.Core.Models;
 using Alza.Database.Data.Entities;
 using Alza.Database.Data.Repositories;
 using AutoMapper;
+using Microsoft.Extensions.Logging;
 
 namespace Alza.Appllication.Services;
 
@@ -11,19 +13,20 @@ public class ProductService : IProductService
 {
     private readonly IProductRepository productRepository;
     private readonly IMapper mapper;
-
-    //TODO: logs
+    private readonly ILogger<ProductService> logger;
 
     public ProductService(
         IProductRepository productRepository,
-        IMapper mapper)
+        IMapper mapper,
+        ILogger<ProductService> logger)
     {
         this.productRepository = productRepository;
         this.mapper = mapper;
+        this.logger = logger;
     }
         
 
-    public async Task<ProductResponse> CreateAsync(ProductCreateModel model)
+    public async Task<BusinessActionResult<ProductResponse>> CreateAsync(ProductCreateModel model)
     {
         var productEntity = mapper.Map<ProductEntity>(model);
         productEntity.CreatedAt = DateTime.UtcNow;
@@ -35,26 +38,26 @@ public class ProductService : IProductService
         return mapper.Map<ProductResponse>(productEntity);
     }
 
-    public async Task<ProductResponse> GetByIdAsync(int id)
+    public async Task<BusinessActionResult<ProductResponse>> GetByIdAsync(int id)
     {
         var existingEntity = await productRepository.GetAsync(id);
 
         if (existingEntity is null)
         {
-            //TODO: redo to businesactionresults
-            throw new FileNotFoundException();
+            return BusinessResultHelper.EntityNotFound<ProductEntity>($"Product.Id: {id}");
         }
 
         return mapper.Map<ProductResponse>(existingEntity);
     }
 
-    public async Task<IEnumerable<ProductListItemResponse>> GetListAsync()
+    public async Task<BusinessActionResult<IEnumerable<ProductListItemResponse>>> GetListAsync()
     {
         var items = await productRepository.GetAllAsync();
-        return mapper.Map<IEnumerable<ProductListItemResponse>>(items);
+        var itemsMapped = mapper.Map<IEnumerable<ProductListItemResponse>>(items); ;
+        return new BusinessActionResult<IEnumerable<ProductListItemResponse>>(itemsMapped);
     }
 
-    public async Task<PagedList<ProductListItemResponse>> GetPagedAsync(PagedRequest request)
+    public async Task<BusinessActionResult<PagedList<ProductListItemResponse>>> GetPagedAsync(PagedRequest request)
     {
         var totalItems = await productRepository.GetCountAsync();
 
@@ -65,17 +68,17 @@ public class ProductService : IProductService
         return result.ToPagedList(request.GetPage(), request.GetLimit(), totalItems);
     }
 
-    public async Task<ProductResponse> UpdateAsync(ProductEditModel model, int id)
+    public async Task<BusinessActionResult<ProductResponse>> UpdateAsync(ProductEditModel model, int id)
     {
         var existingEntity = await productRepository.GetAsync(id);
 
         if (existingEntity is null)
         {
-            //TODO: redo to businesactionresults
-            throw new FileNotFoundException();
+            return BusinessResultHelper.EntityNotFound<ProductEntity>($"Product.Id: {id}");
         }
 
         existingEntity = mapper.Map(model, existingEntity);
+        existingEntity.UpdatedAt = DateTime.UtcNow;
 
         productRepository.UpdateAsync(existingEntity);
 

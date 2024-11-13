@@ -8,7 +8,7 @@ public abstract class EntityFrameworkRepositoryBase<TEntity, TKey> : IRepository
 {
     public IUnitOfWork UnitOfWork { get; }
     
-    protected virtual IQueryable<TEntity> GetQueryable()
+    public virtual IQueryable<TEntity> GetQueryable()
     {
         return GetDbSet();
     }
