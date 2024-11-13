@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Alza.Contracts\Alza.Contracts.csproj" />
     <ProjectReference Include="..\Alza.Core\Alza.Core.csproj" />
+    <ProjectReference Include="..\Alza.Database\Alza.Database.csproj" />
   </ItemGroup>
 
 </Project>

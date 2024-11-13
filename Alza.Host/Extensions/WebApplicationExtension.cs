@@ -21,7 +21,12 @@ public static class WebApplicationExtension
             var groupNames = descriptions.Select(x => x.GroupName);
 
             // Build a swagger endpoint for each discovered API version
-            options.SwaggerEndpoint("/swagger/v1/swagger.json", "V1");
+            foreach(var description in groupNames)
+            {
+                var url = $"/swagger/{description}/swagger.json";
+                var name = description.ToUpperInvariant();
+                options.SwaggerEndpoint(url, name);
+            }
         });
         return app;
     }

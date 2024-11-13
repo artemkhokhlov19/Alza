@@ -5,8 +5,9 @@ namespace Alza.Appllication.Services;
 
 public interface IProductService
 {
-    Task<IList<ProductListItemResponse>> GetListAsync();
-    Task<ActionResult<ProductResponse>> GetByIdAsync(int id);
-    Task<ActionResult<ProductResponse>> CreateAsync(ProductEditModel model);
-    Task<ActionResult<ProductResponse>> UpdateAsync(ProductEditModel model, int id);
+    Task<IEnumerable<ProductListItemResponse>> GetListAsync();
+    Task<PagedList<ProductListItemResponse>> GetPagedAsync(PagedRequest request);
+    Task<ProductResponse> GetByIdAsync(int id);
+    Task<ProductResponse> CreateAsync(ProductCreateModel model);
+    Task<ProductResponse> UpdateAsync(ProductEditModel model, int id);
 }

@@ -16,6 +16,7 @@ public abstract class EntityFrameworkRepositoryBase<TEntity, TKey> : IRepository
     protected abstract DbSet<TEntity> GetDbSet();
 
     protected EntityFrameworkRepositoryBase(IUnitOfWork unitOfWork)
+        : base()
     {
         UnitOfWork = unitOfWork;
     }
@@ -37,7 +38,7 @@ public abstract class EntityFrameworkRepositoryBase<TEntity, TKey> : IRepository
         return await query.ToArrayAsync();
     }
 
-    public Task<TEntity> GetAsync(TKey id)
+    public Task<TEntity?> GetAsync(TKey id)
     {
         var query = this.GetQueryable();
         return query.FirstOrDefaultAsync(t => t.Id.Equals(id));

@@ -31,7 +31,7 @@ services
     .AddScopedServices()
     .AddScopedRepositories()
     .AddAutoMapper()
-    .AddDatabase(configuration);
+    .AddDatabase(builder.Configuration);
 
 var app = builder.Build();
 

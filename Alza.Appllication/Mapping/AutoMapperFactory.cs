@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using Alza.Contracts.DataObjects.Products;
+using Alza.Database.Data.Entities;
+using AutoMapper;
 using AutoMapper.EquivalencyExpression;
 
 namespace Alza.Appllication.Mapping;
@@ -23,5 +25,9 @@ public static class AutoMapperFactory
 
     private static void MapProducts(IMapperConfigurationExpression cfg)
     {
+        cfg.CreateMap<ProductEntity, ProductListItemResponse>();
+        cfg.CreateMap<ProductEntity, ProductResponse>();
+        cfg.CreateMap<ProductCreateModel, ProductEntity>();
+        cfg.CreateMap<ProductEditModel, ProductEntity>();
     }
 }
