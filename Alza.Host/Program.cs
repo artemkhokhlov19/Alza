@@ -2,7 +2,7 @@ using Alza.Host.Extensions;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
-var allowLocalhostOrigin = "_allowLocalgost";
+var allowLocalhostOrigin = "_allowLocalhost";
 
 var services = builder.Services;
 var configuration = builder.Configuration;
@@ -29,10 +29,10 @@ services.AddSwaggerGen(options =>
 
 services
     .AddScopedServices()
-    .AddScopedRepositories()
+    .AddScopedRepositories(configuration)
     .AddAutoMapper()
     .AddValidation()
-    .AddDatabase(builder.Configuration);
+    .AddDatabase(configuration);
 
 var app = builder.Build();
 

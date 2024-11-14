@@ -46,9 +46,19 @@ public static class SeviceExtensions
         return services;
     }
 
-    public static IServiceCollection AddScopedRepositories(this IServiceCollection services)
+    public static IServiceCollection AddScopedRepositories(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped<IProductRepository, ProductRepository>();
+        var useMockData = configuration.GetValue<bool>("UseMock");
+
+        if (useMockData)
+        {
+            services.AddScoped<IProductRepository, MockProductRepository>();
+        }
+        else
+        {
+            services.AddScoped<IProductRepository, ProductRepository>(); 
+        }
+
         return services;
     }
 
