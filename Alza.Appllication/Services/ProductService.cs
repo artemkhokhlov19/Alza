@@ -1,5 +1,5 @@
 ﻿using Alza.Contracts.DataObjects.Products;
-using Alza.Core.BusinessReuslt;
+using Alza.Core.BusinessResult;
 using Alza.Core.Data.Extensions;
 using Alza.Core.Models;
 using Alza.Database.Data.Entities;

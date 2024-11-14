@@ -1,4 +1,4 @@
-﻿namespace Alza.Core.BusinessReuslt;
+﻿namespace Alza.Core.BusinessResult;
 
 public class EntityNotFoundMessage
 {
