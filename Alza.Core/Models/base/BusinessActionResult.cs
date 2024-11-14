@@ -1,4 +1,4 @@
-﻿using Alza.Core.BusinessReuslt;
+﻿using Alza.Core.BusinessResult;
 
 namespace Alza.Core.Models;
 
