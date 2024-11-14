@@ -3,6 +3,9 @@ using FluentValidation;
 
 namespace Alza.Contracts.DataObjects.Validators;
 
+/// <summary>
+/// Validator for product creation request.
+/// </summary>
 public class ProductCreateModelValidator : AbstractValidator<ProductCreateModel>
 {
     public ProductCreateModelValidator()
@@ -24,6 +27,4 @@ public class ProductCreateModelValidator : AbstractValidator<ProductCreateModel>
             });
 
     }
-    
-
 }

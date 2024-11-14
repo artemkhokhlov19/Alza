@@ -1,6 +1,10 @@
 ﻿using Alza.Core.BusinessResult;
 using FluentValidation.Results;
 
+/// <summary>
+/// Action result class to map business logic to ActionResult-like object.
+/// </summary>
+/// <typeparam name="TResult"></typeparam>
 public class BusinessActionResult<TResult>
 {
     public TResult Data { get; set; }

@@ -7,6 +7,13 @@ namespace Alza.Host.Extensions;
 
 public static class BussinesActionResultExtensions
 {
+    /// <summary>
+    /// Converts BussinesActionResult to ActionResult
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="result"></param>
+    /// <param name="customCases"></param>
+    /// <returns></returns>
     public static IActionResult ToActionResult<T>(this BusinessActionResult<T> result, IDictionary<string, IActionResult> customCases = null)
     {
         if (result == null)

@@ -1,5 +1,9 @@
 ﻿namespace Alza.Core.Models;
 
+/// <summary>
+/// Paged list response.
+/// </summary>
+/// <typeparam name="T"></typeparam>
 public class PagedList<T>
 {
     public int CurrentPage { get; private set; }

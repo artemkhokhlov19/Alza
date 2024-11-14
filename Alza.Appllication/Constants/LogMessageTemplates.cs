@@ -1,5 +1,8 @@
 ﻿namespace Alza.Appllication.Constants;
 
+/// <summary>
+/// Message templates collection for logging.
+/// </summary>
 public static class LogMessageTemplates
 {
     public const string ItemNotFound = "Item with id '{id}' not found";

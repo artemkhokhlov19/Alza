@@ -1,4 +1,5 @@
 ﻿using Alza.Core.Data.Repositories;
+using Alza.Core.Models;
 using Alza.Database.Data.Entities;
 
 namespace Alza.Database.Data.Repositories;

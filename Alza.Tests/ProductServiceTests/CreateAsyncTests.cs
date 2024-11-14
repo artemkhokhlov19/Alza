@@ -24,6 +24,7 @@ public class CreateAsyncTests
         this.productRepositoryMock = new Mock<IProductRepository>();
         this.mapperMock = new Mock<IMapper>();
         this.loggerMock = new Mock<ILogger<ProductService>>();
+        this.createValidatorMock = new Mock<IValidator<ProductCreateModel>>();
         this.productService = new ProductService(
             productRepositoryMock.Object, 
             mapperMock.Object, 

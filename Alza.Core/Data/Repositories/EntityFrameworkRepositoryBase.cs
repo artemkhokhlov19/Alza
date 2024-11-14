@@ -3,12 +3,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Alza.Core.Data.Repositories;
 
+/// <summary>
+/// Base repository logic for EF utilization.
+/// </summary>
 public abstract class EntityFrameworkRepositoryBase<TEntity, TKey> : IRepository<TEntity, TKey>
     where TEntity : class, IEntity<TKey>
 {
     public IUnitOfWork UnitOfWork { get; }
     
-    public virtual IQueryable<TEntity> GetQueryable()
+    protected virtual IQueryable<TEntity> GetQueryable()
     {
         return GetDbSet();
     }

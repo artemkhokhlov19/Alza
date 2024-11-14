@@ -30,13 +30,13 @@ public class ProductService : IProductService
         this.logger = logger;
         this.createValidator = createValidator;
     }
-        
 
+    /// <inheritdoc />
     public async Task<BusinessActionResult<ProductResponse>> CreateAsync(ProductCreateModel model)
     {
         var validationResult = createValidator.Validate(model);
 
-        if (!validationResult.IsValid) 
+        if (validationResult is not null && !validationResult.IsValid) 
         {
             logger.LogError(LogMessageTemplates.ValidationError, LoggerUtils.CombineErrorMessages(validationResult.Errors));
             return validationResult;
@@ -54,6 +54,7 @@ public class ProductService : IProductService
         return new BusinessActionResult<ProductResponse>(response, "Created", response.Id);
     }
 
+    /// <inheritdoc />
     public async Task<BusinessActionResult<ProductResponse>> GetByIdAsync(int id)
     {
         var existingEntity = await productRepository.GetAsync(id);
@@ -66,6 +67,7 @@ public class ProductService : IProductService
         return mapper.Map<ProductResponse>(existingEntity);
     }
 
+    /// <inheritdoc />
     public async Task<BusinessActionResult<IEnumerable<ProductListItemResponse>>> GetListAsync()
     {
         var items = await productRepository.GetAllAsync();
@@ -73,6 +75,7 @@ public class ProductService : IProductService
         return new BusinessActionResult<IEnumerable<ProductListItemResponse>>(itemsMapped);
     }
 
+    /// <inheritdoc />
     public async Task<BusinessActionResult<PagedList<ProductListItemResponse>>> GetPagedAsync(PagedRequest request)
     {
         var totalItems = await productRepository.GetCountAsync();
@@ -84,6 +87,7 @@ public class ProductService : IProductService
         return result.ToPagedList(request.GetPage(), request.GetLimit(), totalItems);
     }
 
+    /// <inheritdoc />
     public async Task<BusinessActionResult<ProductResponse>> UpdateDescriptionAsync(ProductEditModel model, int id)
     {
         var existingEntity = await productRepository.GetAsync(id);
@@ -102,6 +106,4 @@ public class ProductService : IProductService
 
         return mapper.Map<ProductResponse>(existingEntity);
     }
-
-    
 }
