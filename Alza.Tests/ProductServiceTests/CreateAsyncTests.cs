@@ -1,9 +1,9 @@
 ﻿using Alza.Appllication.Services;
 using Alza.Contracts.DataObjects.Products;
-using Alza.Core.Models;
 using Alza.Database.Data.Entities;
 using Alza.Database.Data.Repositories;
 using AutoMapper;
+using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -15,6 +15,7 @@ public class CreateAsyncTests
     private Mock<IProductRepository> productRepositoryMock;
     private Mock<IMapper> mapperMock;
     private Mock<ILogger<ProductService>> loggerMock;
+    private Mock<IValidator<ProductCreateModel>> createValidatorMock;
     private ProductService productService;
 
     [SetUp]
@@ -23,7 +24,12 @@ public class CreateAsyncTests
         this.productRepositoryMock = new Mock<IProductRepository>();
         this.mapperMock = new Mock<IMapper>();
         this.loggerMock = new Mock<ILogger<ProductService>>();
-        this.productService = new ProductService(productRepositoryMock.Object, mapperMock.Object, loggerMock.Object);
+        this.productService = new ProductService(
+            productRepositoryMock.Object, 
+            mapperMock.Object, 
+            loggerMock.Object, 
+            createValidatorMock.Object
+        );
     }
 
     [Test]

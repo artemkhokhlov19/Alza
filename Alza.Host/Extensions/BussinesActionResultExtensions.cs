@@ -1,4 +1,5 @@
 ﻿using Alza.Core.Models;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 
@@ -19,7 +20,6 @@ public static class BussinesActionResultExtensions
             {
                 return new OkObjectResult(result.Data);
             }
-
             return new OkResult();
         }
 
@@ -33,12 +33,45 @@ public static class BussinesActionResultExtensions
                 }
             }
         };
-        if (!((customCases != null) ? dictionary.Concat(customCases).ToDictionary((KeyValuePair<string, IActionResult> kv) => kv.Key, (KeyValuePair<string, IActionResult> kv) => kv.Value) : dictionary).TryGetValue(result.Code, out var value))
+
+        if (result.Code == "ValidationFailed")
+        {
+            var errors = new Dictionary<string, List<string>>();
+
+            var validationErrors = result.Parameters as IEnumerable<ValidationFailure>;
+            if (validationErrors != null)
+            {
+                foreach (var error in validationErrors)
+                {
+                    if (!errors.ContainsKey(error.PropertyName))
+                    {
+                        errors[error.PropertyName] = new List<string>();
+                    }
+
+                    errors[error.PropertyName].Add(error.ErrorMessage);
+                }
+            }
+
+            return new UnprocessableEntityObjectResult(
+                new
+                {
+                    type = "https://datatracker.ietf.org/doc/html/rfc9110#section-15.5.21",
+                    title = "One or more validation errors occurred.",
+                    status = 422,
+                    errors
+                });
+        }
+
+        var combinedCases = customCases != null
+            ? dictionary.Concat(customCases).ToDictionary(kv => kv.Key, kv => kv.Value)
+            : dictionary;
+
+        if (!combinedCases.TryGetValue(result.Code, out var actionResult))
         {
             return new BadRequestObjectResult(result.Code.ToString());
         }
 
-        return value;
+        return actionResult;
     }
 
     private static MediaTypeCollection HttpProblemDetailsStandard()

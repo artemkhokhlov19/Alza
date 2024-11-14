@@ -20,7 +20,6 @@ public static class WebApplicationExtensions
             var descriptions = ((WebApplication)app).DescribeApiVersions();
             var groupNames = descriptions.Select(x => x.GroupName);
 
-            // Build a swagger endpoint for each discovered API version
             foreach(var description in groupNames)
             {
                 var url = $"/swagger/{description}/swagger.json";

@@ -7,12 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace Alza.Host.Controllers.V1;
 
 /// <summary>
-/// Controller for products.
+/// Controller for products V1.
 /// </summary>
 [ApiController]
 [ApiVersion("1")]
 [Route("v{v:apiVersion}/[controller]")]
-[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+[ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ProblemDetails))]
 public class ProductsController : ControllerBase
 {
     private readonly IProductService productService;
@@ -47,7 +47,8 @@ public class ProductsController : ControllerBase
     /// <returns>Requested product.</returns>
     [HttpGet]
     [Route("{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ProductListItemResponse>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductResponse))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetByIdAsync(int id)
     {
         var item = await productService.GetByIdAsync(id);
@@ -60,11 +61,13 @@ public class ProductsController : ControllerBase
     /// <param name="product">Product creation request.</param>
     /// <returns>Created product.</returns>
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ProductListItemResponse>))]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ProductResponse))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
+    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> PostAsync(ProductCreateModel product)
     {
         var result = await productService.CreateAsync(product);
-        return result.ToActionResult();
+        return result.IsSuccess ? new CreatedResult(result.Parameters.ToString(), result.Data) : result.ToActionResult();
     }
 
     /// <summary>
@@ -74,10 +77,11 @@ public class ProductsController : ControllerBase
     /// <param name="id">ID of product to update.</param>
     /// <returns>Update product.</returns>
     [HttpPut]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ProductListItemResponse>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductResponse))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> UpdateDescriptionAsync(ProductEditModel product, int id)
     {
-        var result = await productService.UpdateAsync(product, id);
+        var result = await productService.UpdateDescriptionAsync(product, id);
         return result.ToActionResult();
     }
 }

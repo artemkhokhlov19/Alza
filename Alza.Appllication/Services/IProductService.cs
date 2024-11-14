@@ -9,5 +9,5 @@ public interface IProductService
     Task<BusinessActionResult<PagedList<ProductListItemResponse>>> GetPagedAsync(PagedRequest request);
     Task<BusinessActionResult<ProductResponse>> GetByIdAsync(int id);
     Task<BusinessActionResult<ProductResponse>> CreateAsync(ProductCreateModel model);
-    Task<BusinessActionResult<ProductResponse>> UpdateAsync(ProductEditModel model, int id);
+    Task<BusinessActionResult<ProductResponse>> UpdateDescriptionAsync(ProductEditModel model, int id);
 }

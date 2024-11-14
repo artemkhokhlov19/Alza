@@ -1,12 +1,15 @@
 ﻿using Alza.Appllication.Mapping;
 using Alza.Appllication.Services;
+using Alza.Contracts.DataObjects.Products;
 using Alza.Database.Context;
 using Alza.Database.Data.Repositories;
 using Alza.Host.Extensions.OpenApi;
 using Asp.Versioning;
 using AutoMapper;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using System.Globalization;
 
 namespace Alza.Host.Extensions;
 
@@ -75,5 +78,11 @@ public static class SeviceExtensions
             using var scope = scopeFactory.CreateScope();
             scope.ServiceProvider.GetRequiredService<ProductDbContext>().Migrate();
         }
+    }
+
+    public static IServiceCollection AddValidation(this IServiceCollection services)
+    {
+        services.AddValidatorsFromAssemblyContaining<ProductCreateModel>();
+        return services;
     }
 }

@@ -1,10 +1,13 @@
-﻿using Alza.Contracts.DataObjects.Products;
+﻿using Alza.Appllication.Constants;
+using Alza.Appllication.Utils;
+using Alza.Contracts.DataObjects.Products;
 using Alza.Core.BusinessResult;
 using Alza.Core.Data.Extensions;
 using Alza.Core.Models;
 using Alza.Database.Data.Entities;
 using Alza.Database.Data.Repositories;
 using AutoMapper;
+using FluentValidation;
 using Microsoft.Extensions.Logging;
 
 namespace Alza.Appllication.Services;
@@ -14,20 +17,31 @@ public class ProductService : IProductService
     private readonly IProductRepository productRepository;
     private readonly IMapper mapper;
     private readonly ILogger<ProductService> logger;
+    private readonly IValidator<ProductCreateModel> createValidator;
 
     public ProductService(
         IProductRepository productRepository,
         IMapper mapper,
-        ILogger<ProductService> logger)
+        ILogger<ProductService> logger,
+        IValidator<ProductCreateModel> createValidator)
     {
         this.productRepository = productRepository;
         this.mapper = mapper;
         this.logger = logger;
+        this.createValidator = createValidator;
     }
         
 
     public async Task<BusinessActionResult<ProductResponse>> CreateAsync(ProductCreateModel model)
     {
+        var validationResult = createValidator.Validate(model);
+
+        if (!validationResult.IsValid) 
+        {
+            logger.LogError(LogMessageTemplates.ValidationError, LoggerUtils.CombineErrorMessages(validationResult.Errors));
+            return validationResult;
+        }
+
         var productEntity = mapper.Map<ProductEntity>(model);
         productEntity.CreatedAt = DateTime.UtcNow;
         productEntity.UpdatedAt = DateTime.UtcNow;
@@ -35,7 +49,9 @@ public class ProductService : IProductService
         await productRepository.AddAsync(productEntity);
         productRepository.UnitOfWork.Commit();
 
-        return mapper.Map<ProductResponse>(productEntity);
+        var response = mapper.Map<ProductResponse>(productEntity);
+
+        return new BusinessActionResult<ProductResponse>(response, "Created", response.Id);
     }
 
     public async Task<BusinessActionResult<ProductResponse>> GetByIdAsync(int id)
@@ -68,7 +84,7 @@ public class ProductService : IProductService
         return result.ToPagedList(request.GetPage(), request.GetLimit(), totalItems);
     }
 
-    public async Task<BusinessActionResult<ProductResponse>> UpdateAsync(ProductEditModel model, int id)
+    public async Task<BusinessActionResult<ProductResponse>> UpdateDescriptionAsync(ProductEditModel model, int id)
     {
         var existingEntity = await productRepository.GetAsync(id);
 
