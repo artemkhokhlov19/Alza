@@ -8,8 +8,6 @@ using Asp.Versioning;
 using AutoMapper;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
-using System.Globalization;
 
 namespace Alza.Host.Extensions;
 
@@ -34,10 +32,9 @@ public static class SeviceExtensions
 
         serviceCollection.AddSwaggerGen(options =>
         {
-            options.SwaggerDoc("v1", new OpenApiInfo { Title = "API V1", Version = "v1" });
-            options.SwaggerDoc("v2", new OpenApiInfo { Title = "API V2", Version = "v2" });
             options.OperationFilter<SwaggerDefaultValues>();
         });
+        serviceCollection.ConfigureOptions<SwaggerVersionsConfigurator>();
     }
 
     public static IServiceCollection AddScopedServices(this IServiceCollection services)

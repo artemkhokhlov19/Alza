@@ -15,6 +15,7 @@ public static class WebApplicationExtensions
                 swaggerDoc.Servers = new List<OpenApiServer> { new OpenApiServer { Url = $"{baseUrl}" } };
             });
         });
+
         app.UseSwaggerUI(options =>
         {
             var descriptions = ((WebApplication)app).DescribeApiVersions();
