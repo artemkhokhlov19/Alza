@@ -61,6 +61,7 @@ public class ProductService : IProductService
 
         if (existingEntity is null)
         {
+            logger.LogError(LogMessageTemplates.ItemNotFound, id);
             return BusinessResultHelper.EntityNotFound<ProductEntity>($"Product.Id: {id}");
         }
 
@@ -94,6 +95,7 @@ public class ProductService : IProductService
 
         if (existingEntity is null)
         {
+            logger.LogError(LogMessageTemplates.ItemNotFound, id);
             return BusinessResultHelper.EntityNotFound<ProductEntity>($"Product.Id: {id}");
         }
 
