@@ -71,7 +71,7 @@ public class ProductService : IProductService
     public async Task<BusinessActionResult<IEnumerable<ProductListItemResponse>>> GetListAsync()
     {
         var items = await productRepository.GetAllAsync();
-        var itemsMapped = mapper.Map<IEnumerable<ProductListItemResponse>>(items); ;
+        var itemsMapped = mapper.Map<IEnumerable<ProductListItemResponse>>(items); 
         return new BusinessActionResult<IEnumerable<ProductListItemResponse>>(itemsMapped);
     }
 

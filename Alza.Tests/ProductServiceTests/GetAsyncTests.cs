@@ -64,15 +64,24 @@ public class GetAsyncTests
             Id = i,
             Name = $"Product {i}",
             Price = i * 10,
-        }).ToList();
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now,
+        }).ToArray();
+
+        var mockEntitiesMapped = Enumerable.Range(1, 100).Select(i => new ProductListItemResponse
+        {
+            Id = i,
+            Name = $"Product {i}",
+            Price = i * 10,
+        }).ToArray();
 
         productRepositoryMock.Setup(r => r.GetAllAsync()).ReturnsAsync(mockEntities);
-
+        mapperMock.Setup(m => m.Map<IEnumerable<ProductListItemResponse>>(mockEntities)).Returns(mockEntitiesMapped);
         var result = await productService.GetListAsync();
 
         Assert.NotNull(result);
+        Assert.IsNotEmpty(result.Data);
         Assert.That(result.Code, Is.EqualTo("Success"));
-        Assert.That(result.Data, Is.Not.Null);
     }
 
     [Test]
@@ -83,7 +92,14 @@ public class GetAsyncTests
             Id = i,
             Name = $"Product {i}",
             Price = i * 10,
-        }).ToList();
+        }).ToArray();
+
+        var mockEntitiesMapped = Enumerable.Range(1, 100).Select(i => new ProductListItemResponse
+        {
+            Id = i,
+            Name = $"Product {i}",
+            Price = i * 10,
+        }).ToArray();
 
         var limit = 10;
         var exceedingOffset = 110;
@@ -93,6 +109,8 @@ public class GetAsyncTests
 
         productRepositoryMock.Setup(r => r.GetPagedAsync(It.IsAny<int>(), It.IsAny<int>()))
             .ReturnsAsync((int offset, int limit) => mockEntities.Skip(offset).Take(limit).ToList());
+
+        mapperMock.Setup(m => m.Map<IEnumerable<ProductListItemResponse>>(mockEntities)).Returns(mockEntitiesMapped);
 
         var normalPagedRequest = new PagedRequest() { Limit = limit, Offset = normalOffset };
         var exceedingPagedRequest = new PagedRequest() { Limit = limit, Offset = exceedingOffset };

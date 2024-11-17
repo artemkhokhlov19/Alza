@@ -4,6 +4,7 @@ using Alza.Database.Data.Entities;
 using Alza.Database.Data.Repositories;
 using AutoMapper;
 using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -91,24 +92,24 @@ public class CreateAsyncTests
             Price = 1000
         };
 
-        var productResponseMapped = new ProductResponse
+        var validationFailures = new List<ValidationFailure>
         {
-            Name = "Test", 
-            Description = "Test Description",
-            ImgUri = "TestUri",
-            Price = 1000
+            new ValidationFailure("Name", "Name is required.")
         };
 
-        mapperMock.Setup(m => m.Map<ProductEntity>(It.IsAny<ProductCreateModel>())).Returns((ProductEntity)null);
-        productRepositoryMock.Setup(r => r.AddAsync(It.IsAny<ProductEntity>())).Returns(Task.CompletedTask);
+        var validationResult = new ValidationResult(validationFailures);
 
-        var errorResult = new BusinessActionResult<ProductResponse>("Validation error", "Name is required.");
+        createValidatorMock
+            .Setup(v => v.Validate(It.IsAny<ProductCreateModel>()))
+            .Returns(validationResult);
 
         var result = await productService.CreateAsync(productCreateModel);
 
-        productRepositoryMock.Verify(r => r.AddAsync(It.IsAny<ProductEntity>()), Times.Never);
-
         Assert.IsFalse(result.IsSuccess);
-        Assert.That(result.Parameters, Is.EqualTo("Name is required."));
+        Assert.That(result.Code, Is.EqualTo("ValidationFailed"));
+        Assert.That(result.Parameters.GetType(), Is.EqualTo(typeof(List<ValidationFailure>)));
+        Assert.That(((List<ValidationFailure>)result.Parameters)[0].ToString(), Is.EqualTo("Name is required."));
+
+        productRepositoryMock.Verify(r => r.AddAsync(It.IsAny<ProductEntity>()), Times.Never);
     }
 }
