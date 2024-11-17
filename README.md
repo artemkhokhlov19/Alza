@@ -20,8 +20,35 @@ Application implements some custom validation logics and ensures proper values a
 - **Mocking**: [Moq](https://github.com/moq/moq4) (Version: 4.20.72)
 - **Framework**: [.NET 8.0 LTS](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) (Long-Term Support)
 
-## Setup Guide
-**TODO**
+## Startup Guide
+
+### Prerequisites:
+- .NET 8.0 installed: [Download .NET 8.0 LTS](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+- Docker Engine installed: [Get Docker](https://www.docker.com/get-started)
+
+This guide assumes setting up the database in a Docker container.
+
+### Steps:
+
+1. **Clone the Solution**  
+   Clone the repository using Visual Studio or your preferred Git client.
+
+2. **Set the Startup Project**  
+   Set `Alza.Host` as the startup project in Visual Studio.
+
+3. **Run Docker Command**  
+   Open a command prompt (cmd) and run the following command to start a Docker container with a clean MSSQL database:
+
+   ```bash
+   docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=yourStrong(!)Password" -e "MSSQL_PID=Evaluation" -p 1433:1433 --name sqlpreview -d mcr.microsoft.com/mssql/server:2022-preview-ubuntu-22.04
+   ```
+   This will startup a docker container with clean MSSQL database. Connection tring is already setup to corespon the values from command.
+
+4. **Start the application**\
+   Application can be started as a usual project in Visual Studio. It will migrate database and open browser window with swagger in it.
+
+6. **Switching between mock and db data**\
+   For switching between mock data and database parameter UseMock in appsettings.json (Alza.Host) is used. Just switch the value to needed one when testing.
 
 ## Testing
 
