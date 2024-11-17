@@ -25,7 +25,7 @@ Application implements some custom validation logics and ensures proper values a
 
 ## Testing
 
-The business logic layer is covered by 100% unit tests. We use the NUnit testing framework along with the Moq library for mocking dependencies.
+The business logic layer is covered by 100% unit tests. NUnit testing framework is used along with the Moq library for mocking dependencies.
 
 ### Running Tests
 
