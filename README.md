@@ -1,8 +1,7 @@
 # Product Catalog Application
+Application for product catalog manipulations and data retrieval. App is developed with production standards and best practices in mind as if it is starting point of entereprise level application ready to be expanded and adjusted to the project needs. So some complexity in code can be justified by this approach without project size in consideration.
 
 ## Architecture
-Application for product catalog manipulations and data retrieval.
-
 This application follows a three-layer architecture: Presentation, Business, and Data layers are implemented. It leverages the UnitOfWork and Repository patterns to ensure better separation of concerns and adding some more abstractions over data access and working with transactions for better testing experience and posibility of adding another data providers such as inmemo db or noSQL dbs. 
 Additionally, a Contracts library is used to avoid circular dependencies between layers.
 Application layer utilizes custom created BussinesActionResult class for better results and easier mapping to ActionResults in controllers.
