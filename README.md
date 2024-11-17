@@ -11,13 +11,13 @@ Application implements some custom validation logics and ensures proper values a
 
 ## Technologies
 
-- **ORM**: [Entity Framework](https://learn.microsoft.com/en-us/ef/) (Version: 7.0)
+- **ORM**: Entity Framework
 - **Mapping**: [AutoMapper](https://automapper.org/) (Version: 12.0)
 - **Validation**: [FluentValidation](https://fluentvalidation.net/) (Version: 11.0)
 - **Database**: [MSSQL](https://www.microsoft.com/en-us/sql-server) (Version: 2022)
 - **Docs**: [Swagger](https://swagger.io/) (Version: 6.0)
 - **Tests**: [NUnit](https://nunit.org/) (Version: 3.13)
-- **Mocking**: [Moq](https://github.com/moq/moq4) (Version: 4.16)
+- **Mocking**: [Moq](https://github.com/moq/moq4) (Version: 4.20.72)
 - **Framework**: [.NET 8.0 LTS](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) (Long-Term Support)
 
 ## Setup Guide
