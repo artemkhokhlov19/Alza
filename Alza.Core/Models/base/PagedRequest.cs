@@ -9,13 +9,13 @@ public class PagedRequest
     [Range(0, int.MaxValue)]
     public int? Offset {  get; set; }
 
-    public int Limit
+    public int? Limit
     {
         get
         {
             if (!limit.HasValue) 
             {
-                return int.MaxValue;            
+                return null;            
             }
 
             return limit.Value;
@@ -23,7 +23,7 @@ public class PagedRequest
 
         set 
         {
-            limit = ((value == int.MaxValue)) ? null : new int?(value);
+            limit = ((value == int.MaxValue)) ? null : new int?(value ?? 0);
         }
     }
 }
